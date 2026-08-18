@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bivouac — Lac d'Arratille</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone:#EFE8DA;
+    --card:#F8F4EA;
+    --ink:#2A2420;
+    --ink-soft:#6B6153;
+    --clay:#AF4E2C;
+    --olive:#6E7350;
+    --lake:#3E6470;
+    --sand:#E3D5B8;
+    --line:#DCD0B8;
+    --ok:#4C6B44;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--stone); color:var(--ink);
+    font-family:'Inter',sans-serif; padding:0 0 60px;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:28px 18px;}
+
+  header{margin-bottom:22px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:6px;
+  }
+  h1{
+    font-family:'Fraunces',serif; font-weight:650; font-size:32px; line-height:1.05;
+    margin:0 0 14px; color:var(--ink);
+  }
+  .stats{
+    display:flex; flex-wrap:wrap; gap:0; border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; background:var(--card);
+  }
+  .stat{flex:1 1 auto; min-width:90px; padding:10px 14px; border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat b{display:block; font-family:'Fraunces',serif; font-size:19px; font-weight:650;}
+  .stat span{font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em;}
+
+  .callout{
+    margin-top:16px; background:var(--lake); color:#fff; border-radius:10px; padding:14px 16px;
+    font-size:14px; line-height:1.5;
+  }
+  .callout b{font-family:'Fraunces',serif; font-weight:650; font-size:16px; display:block; margin-bottom:3px;}
+
+  .progress-bar{
+    position:sticky; top:0; z-index:10; background:var(--stone); padding:10px 0 6px;
+    display:flex; align-items:center; gap:10px; margin-top:20px; border-bottom:1px solid var(--line);
+  }
+  .progress-track{flex:1; height:8px; background:var(--sand); border-radius:5px; overflow:hidden;}
+  .progress-fill{height:100%; width:0%; background:var(--clay); transition:width .25s ease;}
+  .progress-label{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft); white-space:nowrap;}
+
+  .cat{margin-top:22px;}
+  .cat-head{display:flex; align-items:baseline; gap:8px; margin-bottom:8px;}
+  .cat-head h2{font-family:'Fraunces',serif; font-size:19px; font-weight:650; margin:0;}
+  .cat-head .n{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft);}
+
+  .item{
+    display:flex; align-items:flex-start; gap:10px; background:var(--card); border:1px solid var(--line);
+    border-radius:9px; padding:10px 12px; margin-bottom:6px;
+  }
+  .item.checked{opacity:.48;}
+  .item.checked .name{text-decoration:line-through;}
+  .box{
+    flex:0 0 20px; width:20px; height:20px; border-radius:5px; border:2px solid var(--olive);
+    margin-top:1px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:13px; color:#fff; user-select:none;
+  }
+  .item.checked .box{background:var(--ok); border-color:var(--ok);}
+  .item-body{flex:1;}
+  .name-row{display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
+  .name{font-size:14.5px; font-weight:500;}
+  .tag{
+    font-family:'JetBrains Mono',monospace; font-size:10px; padding:2px 6px; border-radius:4px;
+    letter-spacing:.03em; font-weight:500;
+  }
+  .tag.indisp{background:#F1DCD2; color:var(--clay);}
+  .tag.opt{background:#E4E7DC; color:var(--olive);}
+  .note{font-size:12.5px; color:var(--ink-soft); margin-top:2px; line-height:1.4;}
+
+  .ref{
+    margin-top:34px; border-top:2px solid var(--ink); padding-top:16px;
+  }
+  .ref h2{font-family:'Fraunces',serif; font-size:19px; font-weight:650; margin:0 0 4px;}
+  .ref p{font-size:13px; color:var(--ink-soft); margin:0 0 12px;}
+  table{width:100%; border-collapse:collapse; font-size:12.5px; background:var(--card); border-radius:8px; overflow:hidden;}
+  th,td{padding:8px 9px; text-align:left; border-bottom:1px solid var(--line);}
+  th{font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); background:var(--sand);}
+  td.h{font-weight:600;}
+  tr:last-child td{border-bottom:none;}
+
+  .foot{margin-top:26px; font-size:12px; color:var(--ink-soft); text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Premier bivouac · Pyrénées</div>
+    <h1>Lac d'Arratille</h1>
+    <div class="stats">
+      <div class="stat"><b>29→31 août</b><span>3 jours</span></div>
+      <div class="stat"><b>25 km</b><span>1400m D+</span></div>
+      <div class="stat"><b>1 nuit</b><span>2246m alt.</span></div>
+      <div class="stat"><b>~5-15°</b><span>jour / nuit</span></div>
+    </div>
+    <div class="callout">
+      <b>Quel sac ?</b>
+      35-45L avec ceinture ventrale rembourrée (indispensable avec 1400m D+, ça soulage les épaules). Pas la peine de viser plus grand pour 1 nuit — plus le sac est gros, plus t'es tentée de le remplir.
+    </div>
+  </header>
+
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+    <div class="progress-label" id="label">0/0 indispensables</div>
+  </div>
+
+  <div id="categories"></div>
+
+  <div class="ref">
+    <h2>Pour tes prochains bivouacs</h2>
+    <p>Ce qui change selon durée / saison — check rapide avant de repacker.</p>
+    <table>
+      <tr><th></th><th>1 nuit été</th><th>2-3 nuits été</th><th>Automne/hiver</th></tr>
+      <tr><td class="h">Sac</td><td>35-45L</td><td>50-60L</td><td>55-65L</td></tr>
+      <tr><td class="h">Sac de couchage</td><td>confort 5-10°</td><td>confort 5-10°</td><td>confort -5°/0°</td></tr>
+      <tr><td class="h">Isolante</td><td>doudoune légère</td><td>doudoune + polaire</td><td>doudoune chaude + polaire</td></tr>
+      <tr><td class="h">Eau/jour</td><td>1,5-2L + filtration si point d'eau</td><td>idem, prévoir filtre/pastilles</td><td>1,5L, gourde isotherme</td></tr>
+      <tr><td class="h">Frontale</td><td>indispensable</td><td>indispensable + piles rechange</td><td>indispensable + piles rechange</td></tr>
+    </table>
+  </div>
+
+  <div class="foot">Coche au fur et à mesure que tu prépares ton sac — le tableau se souvient pendant ta session.</div>
+</div>
+
+<script>
+const data = [
+  {
+    cat: "Couchage",
+    items: [
+      {name:"Tente légère (2 places ou perso, testée montée avant de partir)", tag:"indisp"},
+      {name:"Sac de couchage confort 5-10°C", tag:"indisp"},
+      {name:"Matelas gonflable ou mousse", tag:"indisp"},
+      {name:"Sursac / tapis de sol si pas de tente 3 saisons", tag:"opt", note:"utile si ta tente n'est pas étanche au sol"},
+      {name:"Oreiller gonflable", tag:"opt", note:"ou un vêtement roulé dans son sac, ça fait le taf"}
+    ]
+  },
+  {
+    cat: "Vêtements — jour",
+    items: [
+      {name:"T-shirt technique respirant", tag:"indisp"},
+      {name:"Pantalon ou short de rando", tag:"indisp"},
+      {name:"Coupe-vent / softshell", tag:"indisp"},
+      {name:"Chaussettes de rando (x2 paires)", tag:"indisp"},
+      {name:"Casquette ou bob", tag:"opt"}
+    ]
+  },
+  {
+    cat: "Vêtements — nuit / froid altitude",
+    items: [
+      {name:"Doudoune compressible", tag:"indisp", note:"à 2246m la nuit ça tombe vite, même fin août"},
+      {name:"Legging thermique / collant", tag:"indisp"},
+      {name:"Bonnet léger", tag:"indisp"},
+      {name:"Gants légers", tag:"opt"},
+      {name:"Chaussettes chaudes dédiées nuit", tag:"opt", note:"garder les chaussettes de marche sèches pour le lendemain"}
+    ]
+  },
+  {
+    cat: "Pieds",
+    items: [
+      {name:"Chaussures de rando déjà rodées", tag:"indisp", note:"jamais de chaussures neuves sur 25km, ampoules garanties"},
+      {name:"Chaussures légères pour le camp", tag:"opt", note:"claquettes ultra-light, pour laisser respirer les pieds au lac"}
+    ]
+  },
+  {
+    cat: "Eau & cuisine",
+    items: [
+      {name:"Gourde ou poche à eau 2L", tag:"indisp"},
+      {name:"Pastilles ou filtre à eau", tag:"indisp", note:"vous camperez au bord d'un lac, pratique pour refaire le plein"},
+      {name:"Réchaud + popote + gaz", tag:"opt", note:"si vous voulez du chaud le soir, sinon repas froids/lyophilisés"},
+      {name:"Couverts + gobelet léger", tag:"opt"}
+    ]
+  },
+  {
+    cat: "Sécurité & hygiène",
+    items: [
+      {name:"Lampe frontale + piles de rechange", tag:"indisp"},
+      {name:"Trousse de pharmacie basique", tag:"indisp", note:"pansements ampoules, antidouleur, désinfectant"},
+      {name:"Crème solaire + stick lèvres", tag:"indisp"},
+      {name:"Couverture de survie", tag:"indisp", note:"légère, ne prend pas de place, aucune raison de s'en passer"},
+      {name:"Batterie externe (powerbank)", tag:"indisp"},
+      {name:"Papier toilette + petit sac pour redescendre ses déchets", tag:"indisp"}
+    ]
+  },
+  {
+    cat: "Photo / contenu",
+    items: [
+      {name:"Batterie tel/appareil chargée à 100%", tag:"indisp"},
+      {name:"Mini trépied léger", tag:"opt", note:"pour les plans lac au lever du soleil"},
+      {name:"Tenue coordonnée pour les photos du lac", tag:"opt", note:"une seule suffit, pas la peine de doubler tout le stock"}
+    ]
+  },
+  {
+    cat: "Admin",
+    items: [
+      {name:"Carte offline du sentier téléchargée (appli)", tag:"indisp"},
+      {name:"Pièce d'identité", tag:"indisp"},
+      {name:"Un peu de liquide", tag:"opt"}
+    ]
+  }
+];
+
+const container = document.getElementById('categories');
+let totalIndisp = 0, checkedIndisp = 0;
+
+data.forEach((group, gi) => {
+  const catDiv = document.createElement('div');
+  catDiv.className = 'cat';
+  const nIndisp = group.items.filter(i=>i.tag==='indisp').length;
+  totalIndisp += nIndisp;
+  catDiv.innerHTML = `<div class="cat-head"><h2>${group.cat}</h2><span class="n">${group.items.length} items</span></div>`;
+
+  group.items.forEach((item, ii) => {
+    const el = document.createElement('div');
+    el.className = 'item';
+    el.id = `item-${gi}-${ii}`;
+    el.dataset.indisp = item.tag === 'indisp' ? '1' : '0';
+    el.innerHTML = `
+      <div class="box"></div>
+      <div class="item-body">
+        <div class="name-row">
+          <span class="name">${item.name}</span>
+          <span class="tag ${item.tag}">${item.tag === 'indisp' ? 'indispensable' : 'optionnel'}</span>
+        </div>
+        ${item.note ? `<div class="note">${item.note}</div>` : ''}
+      </div>`;
+    el.addEventListener('click', () => {
+      el.classList.toggle('checked');
+      updateProgress();
+    });
+    catDiv.appendChild(el);
+  });
+  container.appendChild(catDiv);
+});
+
+function updateProgress(){
+  const checked = document.querySelectorAll('.item.checked[data-indisp="1"]').length;
+  const fill = document.getElementById('fill');
+  const label = document.getElementById('label');
+  fill.style.width = totalIndisp ? `${(checked/totalIndisp)*100}%` : '0%';
+  label.textContent = `${checked}/${totalIndisp} indispensables`;
+}
+updateProgress();
+</script>
+</body>
+</html>
